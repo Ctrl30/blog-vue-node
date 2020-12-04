@@ -1,4 +1,5 @@
 import Vue from "vue";
+import axios from 'axios';
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
@@ -9,17 +10,27 @@ import "@/assets/font/iconfont.css";
 import "element-ui/lib/theme-chalk/index.css";
 import mavonEditor from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
+import setAxios from '../setAxios';
+import Cookie from 'js-cookie';
 
+setAxios();
 Vue.config.productionTip = false;
-
+Vue.prototype.$axios = axios;
 Vue.use(ElementUI);
 Vue.use(mavonEditor);
 router.beforeEach((to, form, next) => {
-  let token = "123";
-  if (token) {
-    store.commit("changeIsSignIn", 1);
+  if (to.meta.requireAuth) {
+    let token = localStorage.getItem('token');
+    store.commit('setToken', Cookie.get('token'))
+    if (store.state.token) {
+      store.commit("changeIsSignIn", token);
+      next();
+    }else{
+      next({path: '/login'})
+    }
+  }else{
+    next()
   }
-  next();
 });
 new Vue({
   router,

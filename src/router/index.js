@@ -19,7 +19,33 @@ const routes = [
       },
       {
         path:'/personal',
-        component:()=>import('@/views/Personal.vue')
+        component:()=>import('@/views/Personal.vue'),
+        meta:{
+          requireAuth: true, // 需要登录权限
+        }
+      },
+      {
+        path:'/article',
+        component:()=>import('@/views/Article.vue'),
+        meta:{
+          requireAuth: true, // 需要登录权限
+        }
+      },
+      {
+        path:'/article/edit',
+        name: 'editArticle',
+        component:()=>import('@/views/ArticleEdit.vue'),
+        meta:{
+          requireAuth: true, // 需要登录权限
+        }
+      },
+      {
+        path:'/article/edit/:id',
+        name: 'updateArticle',
+        component:()=>import('@/views/ArticleEdit.vue'),
+        meta:{
+          requireAuth: true, // 需要登录权限
+        }
       }
     ]
   },

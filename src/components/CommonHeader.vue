@@ -9,25 +9,25 @@
           <el-menu
             class="nav"
             mode="horizontal"
-            :default-active="activeIndex"
+            :default-active="$route.path"
             @select="handleSelect"
             background-color="#2d2d2d"
             text-color="#9d9d9d"
             active-text-color="#fff"
           >
-            <el-menu-item index="1">
+            <el-menu-item index="/">
               <router-link to="/">
                 <i class="iconfont icon-home"></i> 首页
               </router-link>
             </el-menu-item>
-            <el-menu-item index="2">
-              <router-link to="/blog" v-if="isSignIn === 1">我的博客</router-link>
+            <el-menu-item index="/article">
+              <router-link to="/article" v-if="isSignIn">我的博客</router-link>
             </el-menu-item>
-            <el-menu-item index="3" v-if="isSignIn === 0">
+            <el-menu-item index="/login" v-if="!isSignIn">
               <router-link class="signBtn" to="/login">登录</router-link>
             </el-menu-item>
-            <el-menu-item index="3" v-else-if="isSignIn === 1">
-              <router-link class="signBtn" to="/personal">fuck you</router-link>
+            <el-menu-item index="/personal" v-else-if="isSignIn">
+              <router-link class="signBtn" to="/personal">{{userInfo.nickName}}</router-link>
             </el-menu-item>
           </el-menu>
         </el-col>
@@ -40,19 +40,32 @@
 export default {
   data() {
     return {
-      activeIndex: "1"
+      activeIndex: "/",
+      userInfo: {}
     };
   },
   methods: {
     handleSelect(index) {
       this.activeIndex = index;
-    }
+    },
+    getUserInfo() {
+      this.$axios.get("/api/users/info").then((res) => {
+        console.log("res", res);
+        const result = res.data;
+        if (result) {
+          this.userInfo = result.data
+        }
+      });
+    },
   },
-  computed:{
-    isSignIn(){
-      return this.$store.state.isSignIn;
-    }
-  }
+  computed: {
+    isSignIn() {
+      return this.$store.state.token;
+    },
+  },
+  created() {
+    this.getUserInfo()
+  },
 };
 </script>
 
@@ -78,10 +91,10 @@ header {
     }
   }
 }
-.signBtn{
-    // background-color: #3b99fc;
-    // color: #fff !important;
-    // line-height: 60px;
-    // height: 110%;
+.signBtn {
+  // background-color: #3b99fc;
+  // color: #fff !important;
+  // line-height: 60px;
+  // height: 110%;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="comment-box">
-    <div v-if="isSignIn === 0" class="signInText">登录留言</div>
+    <div v-if="!isSignIn" class="signInText">登录留言</div>
     <div v-else class="input-box">
       <div class="input-top">
         <div class="img">
@@ -93,7 +93,7 @@ export default {
   },
     computed:{
     isSignIn(){
-      return this.$store.state.isSignIn;
+      return this.$store.state.token;
     }
   }
 };
