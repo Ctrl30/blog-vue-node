@@ -42,8 +42,7 @@ export default {
       form: {
         nickName: "xxx",
       },
-      imageUrl:
-        "",
+      imageUrl: "",
       // imageUrl: ""
     };
   },
@@ -55,23 +54,38 @@ export default {
         path: "/login",
       });
     },
-    handleAvatarSuccess(res){
+    handleAvatarSuccess(res) {
       console.log("val", res);
-      this.imageUrl =res.data.imgUrl
+      this.imageUrl = res.data.imgUrl;
     },
-    beforeAvatarUpload: (file) => {
-      const isJPG = file.type === "image/jpeg";
+    beforeAvatarUpload(file) {
+      // const isJPG = file.type === "image/jpeg";
       const isLt2m = file.size / 1024 / 1024 < 2;
-      if (!isJPG) {
-        this.$message.error("不是jpg");
-      }
+      // if (!isJPG) {
+      //   this.$message.error("不是jpg");
+      // }
       if (!isLt2m) {
         this.$message.error("大小超过2m");
       }
-      return isJPG && isLt2m;
+      return isLt2m;
     },
-    save: function () {
+    async save() {
       console.log("fuckyou ", this.form);
+      let res = await this.$axios.post("/api/users/updateUser", {
+        nickName: this.form.nickName,
+        headImg: this.imageUrl,
+      });
+      console.log("ressss", res);
+      if (res?.data?.code === 0) {
+        // this.getUserInfo()
+        this.$message({
+          message: "更新成功",
+          type: "success",
+        });
+        setTimeout(() => {
+          location.reload();
+        }, 500);
+      }
     },
     getUserInfo() {
       this.$axios.get("/api/users/info").then((res) => {
@@ -85,7 +99,7 @@ export default {
     },
   },
   created() {
-    this.getUserInfo()
+    this.getUserInfo();
   },
 };
 </script>

@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     isSignIn: 0,
-    state: '',
+    token: '',
   },
   mutations: {
     changeIsSignIn(state, token) {
