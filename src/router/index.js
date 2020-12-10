@@ -29,7 +29,8 @@ const routes = [
         component:()=>import('@/views/Article.vue'),
         meta:{
           requireAuth: true, // 需要登录权限
-        }
+        },
+        name: 'article'
       },
       {
         path:'/article/edit',

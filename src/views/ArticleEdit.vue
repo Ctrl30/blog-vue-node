@@ -35,7 +35,24 @@ export default {
       console.log("返回");
     },
     save(){
-
+      this.$axios.post('/api/article/add',{
+        title:this.title,
+        content:this.content
+      })
+      .then(res=>{
+        console.log(res)
+        if (res.data.code === 0) {
+          this.$message({
+            message: '新增成功',
+            type: 'success'
+          })
+          this.$router.push({name: 'article'})
+        }
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+      console.log(this.title,this.content)
     },
   },
 };
