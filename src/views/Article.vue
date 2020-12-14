@@ -14,7 +14,7 @@
         <el-table-column prop="create_time" label="日期" width="380">
           <template slot-scope="record">
             <i class="el-icon-time"></i>
-            <span>{{ record.row.create_time }}</span>
+            <span>{{ record.row.createTime }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="opt" label="操作">
@@ -39,24 +39,14 @@
 export default {
   data() {
     return {
-      articleList: [
-        {
-          id: 1,
-          title: "fuck",
-          create_time: "2020-12-01",
-        },
-        {
-          id: 2,
-          title: "you",
-          create_time: "2020-12-02",
-        },
-        {
-          id: 3,
-          title: "world",
-          create_time: "2020-12-03",
-        },
-      ],
+      articleList: [],
     };
+  },
+  created() {
+    this.$axios.get('/api/article/myList')
+    .then(res=>{
+      this.articleList = res.data.data;
+    })
   },
   methods: {
     handleDetail: (record) => {
@@ -78,10 +68,18 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          this.$axios.post('/api/article/delete',{
+            articleId:id
+          }).then(res=>{
+            if (res.data.code === 0) {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+            });
+            location.reload();
+            }
+          })
+
         }).catch(() => {
           this.$message({
             type: 'info',

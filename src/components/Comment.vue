@@ -91,6 +91,9 @@ export default {
       submitText: ""
     };
   },
+  methods: {
+    
+  },
     computed:{
     isSignIn(){
       return this.$store.state.token;

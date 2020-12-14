@@ -1,12 +1,13 @@
 <template>
+<div>
   <div class="list">
-    <div class="card">
-      <router-link :to="'/detail/'+1">
-        <p class="title">nodejs教程</p>
+    <div class="card" v-for="blog in blogList" :key="blog.id">
+      <router-link :to="`/detail/${blog.id}`">
+        <p class="title">{{blog.title}}</p>
       </router-link>
-      <p class="date">2020-09-17</p>
+      <p class="date">{{blog.createTime}}</p>
     </div>
-    <div class="card">
+    <!-- <div class="card">
       <router-link :to="'/detail/'+1">
         <p class="title">vue教程</p>
       </router-link>
@@ -35,12 +36,31 @@
         <p class="title">mysql教程</p>
       </router-link>
       <p class="date">2020-09-22</p>
-    </div>
+    </div> -->
   </div>
+</div>
+
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      blogList: [],
+    }
+  },
+  methods: {
+    getBlogList(){
+     this.$axios.get('/api/article/allList')
+    .then(res=>{
+      this.blogList = res.data.data;
+    })
+    }
+  },
+  created() {
+    this.getBlogList();
+  },
+};
 </script>
 
 <style lang="scss" scoped>

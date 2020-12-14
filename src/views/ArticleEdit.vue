@@ -5,7 +5,7 @@
     </div>
     <div class="editTitle">标题</div>
     <el-input
-      v-model="title"
+      v-model="blogDetail.title"
       placeholder="请输入标题"
       size="normal"
       clearable
@@ -13,7 +13,7 @@
     <div class="editTitle">内容编辑器</div>
     <div class="markdown"></div>
        <mavon-editor
-          v-model="content"
+          v-model="blogDetail.content"
         />
         <div class="saveBtn">
             <el-button type="primary" size="default" @click="save">保存</el-button>
@@ -25,8 +25,10 @@
 export default {
   data() {
     return {
-      title: "",
-      content: "",
+      blogDetail:{
+        title:'',
+        content: ''
+      },
     };
   },
   methods: {
@@ -34,10 +36,34 @@ export default {
         this.$router.go(-1)
       console.log("返回");
     },
+    getDetail(){
+      this.$axios.get('/api/article/detail',{
+        params:{
+          articleId:this.$route.params.id
+        }
+      }).then(res=>{
+        console.log('res',res)
+        this.blogDetail = res.data.data;
+      })
+    },
     save(){
-      this.$axios.post('/api/article/add',{
-        title:this.title,
-        content:this.content
+      if (this.$route.params.id) {
+        console.log('this.$route.params.id',this.$route.params.id)
+        this.$axios.post('/api/article/update',{
+        title:this.blogDetail.title,
+        content:this.blogDetail.content,
+        articleId: this.$route.params.id
+      })
+      .then(res=>{
+        console.log(res)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+      }else{
+        this.$axios.post('/api/article/add',{
+        title:this.blogDetail.title,
+        content:this.blogDetail.content
       })
       .then(res=>{
         console.log(res)
@@ -52,8 +78,14 @@ export default {
       .catch(err=>{
         console.log(err)
       })
-      console.log(this.title,this.content)
+      }
     },
+  },
+  created() {
+    if (this.$route.params.id) {
+      // 编辑页面
+      this.getDetail();
+    }
   },
 };
 </script>
