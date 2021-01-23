@@ -4,8 +4,8 @@
     <div v-else class="input-box">
       <div class="input-top">
         <div class="img">
-          <img class="avatar" />
-          <p class="username">ooo</p>
+          <img class="avatar" :src="userInfo.headImg" />
+          <p class="username">{{ userInfo.nickName }}</p>
         </div>
         <div class="text">
           <textarea class="comment-content" v-model="submitText"></textarea>
@@ -13,68 +13,28 @@
       </div>
 
       <div class="input-buttom">
-        <a href="javascript:void(0);" class="submit">发表评论</a>
+        <a href="javascript:void(0);" class="submit" @click="handleClick"
+          >发表评论</a
+        >
       </div>
     </div>
 
     <div class="all_comment">
       <p class="title">
         全部评论
-        <span class="total"></span>条
+        <span class="total">{{commentList.length}} </span>条
       </p>
       <div class="comment-list">
-        <div class="comment-item">
+        <div class="comment-item" v-for="comment in commentList" :key="comment.id">
           <div class="item_l">
-            <img class="avatar" />
-            <p class="username">ffff</p>
+            <img class="avatar" :src="comment.headImg" />
+            <p class="username">{{ comment.nickName }}</p>
           </div>
           <div class="item_r">
             <div class="comment-content">
-              <div class="comment_text">klasdjhfasierbkljyasgudfbkl</div>
+              <div class="comment_text">{{comment.content}}</div>
               <div class="comment_time">
-                <span class="date">2020-09-17 16:10:20</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="comment-item">
-          <div class="item_l">
-            <img class="avatar" />
-            <p class="username">ffff</p>
-          </div>
-          <div class="item_r">
-            <div class="comment-content">
-              <div class="comment_text">klasdjhfasierbkljyasgudfbkl</div>
-              <div class="comment_time">
-                <span class="date">2020-09-17 16:10:20</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="comment-item">
-          <div class="item_l">
-            <img class="avatar" />
-            <p class="username">ffff</p>
-          </div>
-          <div class="item_r">
-            <div class="comment-content">
-              <div class="comment_text">klasdjhfasierbkljyasgudfbkl</div>
-              <div class="comment_time">
-                <span class="date">2020-09-17 16:10:20</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="comment-item">
-          <div class="item_l">
-            <img class="avatar" />
-            <p class="username">ffff</p>
-          </div>
-          <div class="item_r">
-            <div class="comment-content">
-              <div class="comment_text">klasdjhfasierbkljyasgudfbkl</div>
-              <div class="comment_time">
-                <span class="date">2020-09-17 16:10:20</span>
+                <span class="date">{{comment.createTime}}</span>
               </div>
             </div>
           </div>
@@ -88,17 +48,59 @@
 export default {
   data() {
     return {
-      submitText: ""
+      submitText: "",
+      userInfo: {},
+      commentList: [],
     };
   },
   methods: {
-    
+    getUserInfo() {
+      this.$axios.get("/api/users/info").then((res) => {
+        const result = res.data;
+        if (result) {
+          this.userInfo = result.data;
+        }
+      });
+    },
+    handleClick() {
+      this.$axios
+        .post("/api/comment/publish", {
+          content: this.submitText,
+          articleId: this.$route.params.id,
+        })
+        .then((res) => {
+          if (res.data.code === 0) {
+          this.$message.success('发表成功')
+            this.submitText = "";
+            this.getComments()
+          }
+        });
+    },
+    getComments() {
+      console.log('this.$route.params',this.$route.params)
+      this.$axios
+        .get("/api/comment/list", {
+          params:{
+          articleId:this.$route.params.id
+        }
+        })
+        .then((res) => {
+          console.log('res', res);
+          if (res.data.code === 0) {
+            this.commentList = res.data.list
+          }
+        });
+    },
   },
-    computed:{
-    isSignIn(){
+  computed: {
+    isSignIn() {
       return this.$store.state.token;
-    }
-  }
+    },
+  },
+  created() {
+    this.getUserInfo();
+    this.getComments();
+  },
 };
 </script>
 
@@ -212,10 +214,10 @@ export default {
           font-size: 14px;
           padding: 10px;
           color: #666;
-          .comment_text{
+          .comment_text {
             min-height: 70px;
           }
-          .comment_time{
+          .comment_time {
             text-align: right;
             font-size: 12px;
             padding: 10;
