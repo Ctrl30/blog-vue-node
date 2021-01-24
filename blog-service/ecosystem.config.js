@@ -26,7 +26,7 @@ module.exports = {
       "pre-deploy-local": "",
       ssh_options: "StrictHostKeyChecking=no",
       "post-deploy":
-        "npm install && pm2 reload ecosystem.config.js --env production",
+        "npm install && pm2 reload ecosystem.config.js NODE_ENV=production",
       "pre-setup": "",
       env: {
         NODE_ENV: "production",
