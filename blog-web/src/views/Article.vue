@@ -52,11 +52,9 @@ export default {
     handleDetail: (record) => {
       const { id } = record.row;
       window.open(`#/detail/${id}`);
-      console.log("handleDetail", record);
     },
     handleEdit(record) {
       const { id } = record.row;
-      console.log("handleEdit", record);
       this.$router.push({
         path: `/article/edit/${id}`,
       });

@@ -34,7 +34,6 @@ export default {
   methods: {
     goBack(){
         this.$router.go(-1)
-      console.log("返回");
     },
     getDetail(){
       this.$axios.get('/api/article/detail',{
@@ -42,31 +41,23 @@ export default {
           articleId:this.$route.params.id
         }
       }).then(res=>{
-        console.log('res',res)
         this.blogDetail = res.data.data;
       })
     },
     save(){
       if (this.$route.params.id) {
-        console.log('this.$route.params.id',this.$route.params.id)
         this.$axios.post('/api/article/update',{
         title:this.blogDetail.title,
         content:this.blogDetail.content,
         articleId: this.$route.params.id
-      })
-      .then(res=>{
-        console.log(res)
-      })
-      .catch(err=>{
-        console.log(err)
-      })
+      });
+    
       }else{
         this.$axios.post('/api/article/add',{
         title:this.blogDetail.title,
         content:this.blogDetail.content
       })
       .then(res=>{
-        console.log(res)
         if (res.data.code === 0) {
           this.$message({
             message: '新增成功',
@@ -74,10 +65,7 @@ export default {
           })
           this.$router.push({name: 'article'})
         }
-      })
-      .catch(err=>{
-        console.log(err)
-      })
+      });
       }
     },
   },

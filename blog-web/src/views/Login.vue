@@ -76,7 +76,6 @@ import Cookie from "js-cookie";
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
-      console.log("value", value);
       if (value === "") {
         callback(new Error("请输入密码"));
       } else {
@@ -120,12 +119,12 @@ export default {
           if (result) {
             Cookie.set("token", result.data.token);
             this.loading = false;
+            // localStorage.setItem('token', result.data.token);
             this.$store.commit("changeIsSignIn", result.data.token);
             this.$store.commit("setToken", result.data.token);
             this.$router.push({ name: "home" });
           }
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -133,12 +132,15 @@ export default {
     signUp(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log("okok");
           this.$axios.post("/api/users/register", this.regForm).then((res) => {
-            console.log("res", res);
+            if (res.data.code === 0) {
+              this.$message.success('注册成功')
+              this.status = 1;
+            }else{
+              this.$message.error(res.data.msg)
+            }
           });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });

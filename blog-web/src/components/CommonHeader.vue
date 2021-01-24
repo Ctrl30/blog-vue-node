@@ -50,7 +50,6 @@ export default {
     },
     getUserInfo() {
       this.$axios.get("/api/users/info").then((res) => {
-        console.log("res", res);
         const result = res.data;
         if (result) {
           this.userInfo = result.data

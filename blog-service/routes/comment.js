@@ -6,7 +6,6 @@ const querySql = require("../db/index");
 router.post("/publish", async (req, res, next) => {
   const { content, articleId } = req.body;
   const { userId } = req.user;
-  console.log('userid',userId)
   try {
     const userSql = "select id,headImg,nickName from user where id = ?";
     const users = await querySql(userSql, [userId]);
@@ -32,11 +31,9 @@ router.post("/publish", async (req, res, next) => {
 // 评论接口
 router.get("/list", async (req, res, next) => {
     const { articleId } = req.query;
-    console.log('articleId',articleId)
     try {
       const listSql = "select * from comment where articleId = ? order by createTime desc";
       const list = await querySql(listSql, [articleId]);
-      console.log('list', list)
       res.send({
         code: 0,
         msg: "success",

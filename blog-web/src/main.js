@@ -20,7 +20,9 @@ Vue.use(ElementUI);
 Vue.use(mavonEditor);
 router.beforeEach((to, form, next) => {
   if (to.meta.requireAuth) {
-    let token = localStorage.getItem('token');
+    console.log('store', store)
+    // let token = localStorage.getItem('token');
+    let token = Cookie.get('token');
     store.commit('setToken', Cookie.get('token'))
     if (store.state.token) {
       store.commit("changeIsSignIn", token);

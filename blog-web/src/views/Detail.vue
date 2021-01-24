@@ -38,7 +38,6 @@ export default {
           articleId:this.$route.params.id
         }
       }).then(res=>{
-        console.log('res',res)
         this.blogDetail = res.data.data;
       })
     }

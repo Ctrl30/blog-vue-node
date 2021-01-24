@@ -77,7 +77,6 @@ export default {
         });
     },
     getComments() {
-      console.log('this.$route.params',this.$route.params)
       this.$axios
         .get("/api/comment/list", {
           params:{
@@ -85,7 +84,6 @@ export default {
         }
         })
         .then((res) => {
-          console.log('res', res);
           if (res.data.code === 0) {
             this.commentList = res.data.list
           }

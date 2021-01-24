@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "pm2": "pm2 start ecosystem.config.js --env=production",
+    "pm2awtch": "pm2 start ./bin/www --name app --watch --ignore-watch='node_modules'"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
