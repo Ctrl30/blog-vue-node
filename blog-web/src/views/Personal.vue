@@ -14,7 +14,7 @@
         <el-form-item label="头像">
           <el-upload
             class="avatar-uploader"
-            action="http://106.52.102.92/:3000/api/users/upload"
+            action="http://106.52.102.92:3000/api/users/upload"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             name="headImg"
