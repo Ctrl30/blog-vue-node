@@ -55,7 +55,6 @@ export default {
       });
     },
     handleAvatarSuccess(res) {
-      console.log("val", res);
       this.imageUrl = res.data.imgUrl;
     },
     beforeAvatarUpload(file) {
@@ -70,12 +69,10 @@ export default {
       return isLt2m;
     },
     async save() {
-      console.log("fuckyou ", this.form);
       let res = await this.$axios.post("/api/users/updateUser", {
         nickName: this.form.nickName,
         headImg: this.imageUrl,
       });
-      console.log("ressss", res);
       if (res?.data?.code === 0) {
         // this.getUserInfo()
         this.$message({
@@ -89,7 +86,6 @@ export default {
     },
     getUserInfo() {
       this.$axios.get("/api/users/info").then((res) => {
-        console.log("res", res);
         const result = res.data;
         if (result) {
           this.form.nickName = result.data.nickName;

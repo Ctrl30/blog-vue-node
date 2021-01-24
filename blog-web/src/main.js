@@ -19,11 +19,11 @@ Vue.prototype.$axios = axios;
 Vue.use(ElementUI);
 Vue.use(mavonEditor);
 router.beforeEach((to, form, next) => {
+  let token = Cookie.get('token');
+  store.commit('setToken', Cookie.get('token'))
   if (to.meta.requireAuth) {
-    console.log('store', store)
-    // let token = localStorage.getItem('token');
-    let token = Cookie.get('token');
-    store.commit('setToken', Cookie.get('token'))
+    // let token = Cookie.get('token');
+    // store.commit('setToken', Cookie.get('token'))
     if (store.state.token) {
       store.commit("changeIsSignIn", token);
       next();
